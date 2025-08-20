@@ -98,16 +98,12 @@ I loved to implement this one. It's one of the patterns that fascinates me the m
 
 I was also not very familiar with unit testing so I tried my best shot by reading Jest's documentation and trying to implement simple/dummy tests. I also read a few online articles on how to implement unit testing in Jest using repository interfaces. 
 
-----
-
 ## What could be improved?
 
 - I did not write unit tests for loans as I was already on a tight schedule, but it is a major point for improvement.
 - We could enhance the DomainException by passing a custom http status code to return to the api instead of always returning 400.
 - 
 - Of course, there are a lot of features we could use here... update loans, extend return dates, add users auth, auto fill book metadata from a Open source API, I can think of many things!
-
-----
 
 ## Technologies used
 
@@ -116,8 +112,6 @@ I was also not very familiar with unit testing so I tried my best shot by readin
 - NestJS
 - PostgreSQL
 - Prisma ORM
-
-----
 
 ## About the author
 
