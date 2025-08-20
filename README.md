@@ -19,15 +19,18 @@ Core features/endpoints:
 
 ## Commands
 
-To boot up the database using Docker, use:
-
+### Docker Setup
 For Docker CLI: 
 - `docker-compose up -d --build`
 
 For Docker Desktop:
 - `docker compose up -d --build`
 
-If you want to run locally, make sure to install **Node.js** and **Yarn classic**.
+Both commands will do the same: start the database and the api.
+
+### Local Setup
+
+If you want to run locally, make sure to install **Node.js** and **Yarn classic**. I did not include the local DB Setup in this readme, but if you want, feel free to use a local db as well (or run just the database in Docker using `docker compose up -d --build postgres`)
 
 **Build**
 `yarn build`
@@ -73,6 +76,25 @@ I decided to start with the database creation. I booted up a PostgreSQL image wi
 Note that the PrismaService is not abstraced. The abstractions are the Repository interfaces, which will then 
 
 **Note:** While injecting the prisma repositories in the use cases, I noticed that I could not use the interface definitions directly, as they only exist in compile-time and nest requires runtime references. So I had to map them to a tag, that you may see as "PRISMA_BOOK_REPOSITORY", so that Nest knows who I am referencing at runtime.
+
+### Entity design
+
+Designing separate entities was a tough challenge because in NestJS I was used to keep them as one, using decorators specific to orms like you would in Mongoose and TypeORM. Keeping them separate with getters (similar to Java) seemed very unusual at first. Another thing was instantiating these entities. 
+Usually, when we couple the entities to the ORM/db implementations, there is no need to generate ids, or care about instantiating dates or things like that. It's all Out-of-the-box, but of course, this is bad practice since it would be a nightmare to change it later.
+
+Anyway, I kept the design as is and this allowed me to use modern things like `uuidv7`, which is a better way to generate random ids that are still sortable by a database.
+
+### Use case pattern
+
+As I wanted each resource in this app to "mind its own business", I decided to go with the use cases pattern and assign each one a single responsibility, avoiding things like god services that are thousand-lines long and contain lots of business logic, making maintenance difficult (yes, I guess we've all been there, right?)
+
+### Repository pattern
+
+I loved to implement this one. It's one of the patterns that fascinates me the most. No much to describe here though. It's plain dependency inversion! 
+
+### Unit tests
+
+I was also not very familiar with unit testing so I tried my best shot by reading Jest's documentation and trying to implement simple/dummy tests. I also read a few online articles on how to implement unit testing in Jest using repository interfaces. 
 
 ----
 
