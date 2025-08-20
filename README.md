@@ -32,18 +32,20 @@ Both commands will do the same: start the database and the api.
 
 If you want to run locally, make sure to install **Node.js** and **Yarn classic**. I did not include the local DB Setup in this readme, but if you want, feel free to use a local db as well (or run just the database in Docker using `docker compose up -d --build postgres`)
 
-**Build**
+#### Build
+
 `yarn build`
 
-**Migrate database**
+#### Migrate database
+
 `yarn prisma migrate dev`
 
-**Start (dev mode)**
+#### Start (dev mode)
+
 `yarn start:dev`
 
-**Start (prod mode)**
+#### Start (prod mode)
 `yarn start:prod`
-
 
 ## Thought process
 
