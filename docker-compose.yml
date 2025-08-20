@@ -13,6 +13,36 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - library-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: library-api
+    restart: always
+    # i put this limit so that it mimics how the app would work in an EC2 free tier instance :D
+    mem_limit: 1g
+    cpus: 0.5
+    environment:
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - library-network
+    command: >
+      sh -c "
+        yarn prisma migrate deploy &&
+        node dist/main
+      "
 
 volumes:
   postgres_data:
+
+networks:
+  library-network:
+    driver: bridge

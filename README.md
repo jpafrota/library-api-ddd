@@ -9,7 +9,7 @@ Main entities:
 - Book
 - Loan
 
-A few features:
+Core features/endpoints:
 
 - Create books
 - Get book by id
@@ -48,28 +48,35 @@ I'll try to describe in this session all the steps I've taken to implement this 
 
 ### Initial DDD study
 
-I was not very familiar with DDD approach per se, so the first step was to study it.
-I learned that DDD splits application into several layers, where the **domain layer** being in the core of the app.
+I was not very familiar with DDD approach per se, so the first step was to search and study about it. Although I have never worked directly with it, I was familiar with some concepts like dependency inversion, SRP and other principles that DDD relies heavily on. 
 
-The **domain layer** contains all business logic for a given entity, and it's independent from the infrastructure, API, and other application components. It is an independent layer where we keep the core functionality for a specific entity. 
+Based on my research, I found out that DDD splits application into several layers, where the **domain layer** is at the core of the application, as it describes the business models and entities with all their inner rules. 
 
-The **api layer** is composed of the app's network interfaces (controllers) that will map the requests/responses with the client
+The **domain layer** contains all business logic for a given entity, and it's independent from the infrastructure, API, and other application components. It is an independent layer where we keep the core functionality for a specific entity. Having a separate layer for this type of resource is extremely useful if we ever decide to change the implementation details in the future. Change databases? OK, domain remains untouched. Implement a CLI feature instead of relying on the HTTP transport layer with REST? You're covered too! There are a lot of possibilities. 
 
-The **application layer** will feature the use cases, which will then invoke the domain layer for specific entity logic.
+The **api layer** is composed of the app's network interfaces (controllers) that will manipulate requests/responses, talking directly to the client. 
+
+The **application layer** will basically orchestrate everything. Invoking the domain models and persisting them by talking with the infrastructure layer, we make sure that they do not ever talk directly to each other and are totally decoupled.
 
 The **infrastructure layer** will be responsible for mapping the entities to the database and ensure that we persist valid cahnges when requested. It is independent of the domain layer, whereas if the business logic changes, changes to the infrastructure layer should be minimal. 
 
 Of course, we need to convert often from the infra entity to the domain entity, that's where interfaces and mappers are really handy. 
 
-The main benefit of this approach is that it makes the domain independent from the implementation. If we ever decide to change database or ORM, it is easy because everything is built on top of abstractions and **dependency injection**. 
-
 ### App structure
 
-Given that, I decided to create two modules, each with their own layers. Each module will have all the layers for its entities.
+Given that, I decided to create two main modules: **books** and **loans**, each with their own layers. 
+We also have **shared modules** such as database modules that will be, as the name says, shared between all the other (books/loans).
 
 ### Database setup
 
-I decided to start with the database creation. I booted up a PostgreSQL image with a `docker-compose.yml` file to speed up this process and set up Prisma ORM with the initial schema/migrations.
+I decided to start with the database creation. I booted up a PostgreSQL image with a `docker-compose.yml` file to speed up this process and set up Prisma ORM with the initial schema/migrations. After that, I created a prisma module/service containing the database connection required by the module. 
+Note that the PrismaService is not abstraced. The abstractions are the Repository interfaces, which will then 
+
+----
+
+## What could be improved?
+
+I did not write unit tests for loans as I was already on a tight schedule, but it is a major point for improvement.
 
 ----
 
@@ -80,3 +87,11 @@ I decided to start with the database creation. I booted up a PostgreSQL image wi
 - NestJS
 - PostgreSQL
 - Prisma ORM
+
+----
+
+## About the author
+
+Hello! My name's Jorge, I'm 25 years old (currently), and I'm from Manaus - Brazil :brazil:. Studying about software architecture and best practices is one of my biggest passions when it comes to coding, alongside with performance optimization problems and algorithms. 
+
+I learned a lot with this challenge and I hope I can improve it in a near future. 
