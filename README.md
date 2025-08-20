@@ -72,11 +72,16 @@ We also have **shared modules** such as database modules that will be, as the na
 I decided to start with the database creation. I booted up a PostgreSQL image with a `docker-compose.yml` file to speed up this process and set up Prisma ORM with the initial schema/migrations. After that, I created a prisma module/service containing the database connection required by the module. 
 Note that the PrismaService is not abstraced. The abstractions are the Repository interfaces, which will then 
 
+**Note:** While injecting the prisma repositories in the use cases, I noticed that I could not use the interface definitions directly, as they only exist in compile-time and nest requires runtime references. So I had to map them to a tag, that you may see as "PRISMA_BOOK_REPOSITORY", so that Nest knows who I am referencing at runtime.
+
 ----
 
 ## What could be improved?
 
-I did not write unit tests for loans as I was already on a tight schedule, but it is a major point for improvement.
+- I did not write unit tests for loans as I was already on a tight schedule, but it is a major point for improvement.
+- We could enhance the DomainException by passing a custom http status code to return to the api instead of always returning 400.
+- 
+- Of course, there are a lot of features we could use here... update loans, extend return dates, add users auth, auto fill book metadata from a Open source API, I can think of many things!
 
 ----
 
